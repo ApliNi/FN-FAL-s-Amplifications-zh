@@ -93,19 +93,43 @@ public class GearTask {
     }
 
     public void updateArmour(int armorLevel, int xpAmountIncremented, int maxXpReq, ItemStack item, ItemMeta meta, List<String> lore) {
-        lore.set(7, Utils.colorTranslator("&e等级: ") + armorLevel);
-        lore.set(8, Utils.colorTranslator("&e进阶进度:"));
-        lore.set(9, Utils.colorTranslator("&7[&r" + getProgressBar(xpAmountIncremented, maxXpReq, 10, '■', ChatColor.YELLOW, ChatColor.GRAY) + "&7]"));
+//        lore.set(7, Utils.colorTranslator("&e等级: ") + armorLevel);
+//        lore.set(8, Utils.colorTranslator("&e进阶进度:"));
+//        if(lore.size() != 10){
+//            lore.add("");
+//        }
+//        lore.set(9, Utils.colorTranslator("&7[&r" + getProgressBar(xpAmountIncremented, maxXpReq, 10, '■', ChatColor.YELLOW, ChatColor.GRAY) + "&7]"));
+//
+//        if(WeaponArmorEnum.CHESTPLATE.isTagged(getItemStack().getType()) && armorLevel == 30 && xpAmountIncremented == 1) {
+//            lore.add(10,"");
+//            lore.add(11, ChatColor.RED + "◬◬◬◬◬◬| " + ChatColor.LIGHT_PURPLE + ""
+//                    + ChatColor.BOLD + "效果 " + ChatColor.GOLD + "|◬◬◬◬◬◬");
+//            lore.add(12, ChatColor.GREEN + "永久饱和效果");
+//        }
+//
+//        meta.setLore(lore);
+//        item.setItemMeta(meta);
+
+        safeSetLore(lore, 7, Utils.colorTranslator("&e等级: ") + armorLevel);
+        safeSetLore(lore, 8, Utils.colorTranslator("&e进阶进度:"));
+        safeSetLore(lore, 9, Utils.colorTranslator("&7[&r" + getProgressBar(xpAmountIncremented, maxXpReq, 10, '■', ChatColor.YELLOW, ChatColor.GRAY) + "&7]"));
 
         if(WeaponArmorEnum.CHESTPLATE.isTagged(getItemStack().getType()) && armorLevel == 30 && xpAmountIncremented == 1) {
-            lore.add(10,"");
-            lore.add(11, ChatColor.RED + "◬◬◬◬◬◬| " + ChatColor.LIGHT_PURPLE + ""
+            safeSetLore(lore, 10, "");
+            safeSetLore(lore, 11, ChatColor.RED + "◬◬◬◬◬◬| " + ChatColor.LIGHT_PURPLE + ""
                     + ChatColor.BOLD + "效果 " + ChatColor.GOLD + "|◬◬◬◬◬◬");
-            lore.add(12, ChatColor.GREEN + "永久饱和效果");
+            safeSetLore(lore, 12, ChatColor.GREEN + "永久饱和效果");
         }
 
         meta.setLore(lore);
         item.setItemMeta(meta);
+    }
+
+    private void safeSetLore(List<String> lore, int index, String value) {
+        while (lore.size() <= index) {
+            lore.add("");
+        }
+        lore.set(index, value);
     }
 
     public boolean levelUpArmour(int armorLevel, int xpAmountIncremented, int maxXpReq, ItemStack item, ItemMeta meta, PersistentDataContainer progress, List<String> lore, Player p) {
